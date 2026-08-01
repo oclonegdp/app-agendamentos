@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 const statuses = ['TRIAL', 'ACTIVE', 'SUSPENDED', 'CANCELLED'] as const;
 
 type SubscriptionStatus = (typeof statuses)[number];
