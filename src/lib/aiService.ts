@@ -19,7 +19,7 @@ export interface ProcessClientMessageParams {
 }
 
 export class AIService {
-  private static async fetchCompanyContext(companyId: string): Promise<string> {
+  public static async fetchCompanyContext(companyId: string): Promise<string> {
     try {
       const company = await prisma.company.findUnique({
         where: { id: companyId },
@@ -45,10 +45,10 @@ export class AIService {
       }
 
       const servicesList = company.services
-        .map((service) => `- ${service.name}: R$ ${service.price.toFixed(2)}${service.duration ? ` (${service.duration} min)` : ''}`)
+        .map((service: any) => `- ${service.name}: R$ ${service.price.toFixed(2)}${service.duration ? ` (${service.duration} min)` : ''}`)
         .join('\n') || 'Nenhum serviço cadastrado no momento.';
 
-      const upcomingAppointments = company.appointments.map((appointment) => {
+      const upcomingAppointments = company.appointments.map((appointment: any) => {
         const date = new Date(appointment.date).toLocaleString('pt-BR', {
           day: '2-digit',
           month: '2-digit',
@@ -128,7 +128,7 @@ export interface AutomationPayload {
 }
 
 export class MultimodalAutomationService {
-  private static async fetchCompanyContext(companyId: string): Promise<string> {
+  public static async fetchCompanyContext(companyId: string): Promise<string> {
     try {
       const company = await prisma.company.findUnique({
         where: { id: companyId },
@@ -154,7 +154,7 @@ export class MultimodalAutomationService {
       }
 
       const servicesList = company.services
-        .map((service) => `- ${service.name}: R$ ${service.price.toFixed(2)}${service.duration ? ` (${service.duration} min)` : ''}`)
+        .map((service: any) => `- ${service.name}: R$ ${service.price.toFixed(2)}${service.duration ? ` (${service.duration} min)` : ''}`)
         .join('\n') || 'Nenhum serviço cadastrado.';
 
       const futureWindowStart = new Date();
@@ -166,7 +166,7 @@ export class MultimodalAutomationService {
         : 'Nenhuma data bloqueada registrada para os próximos 30 dias.';
 
       const upcomingAppointments = company.appointments
-        .map((appointment) => {
+        .map((appointment: any) => {
           const date = new Date(appointment.date).toLocaleString('pt-BR', {
             day: '2-digit',
             month: '2-digit',

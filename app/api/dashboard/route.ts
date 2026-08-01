@@ -95,9 +95,10 @@ export async function GET(request: Request) {
     );
     const todayExpenses = todayExpenseList.reduce((acc: number, curr: { amount?: number | null }) => acc + (curr.amount || 0), 0);
     const paymentMethodTotals = todayTransactions.reduce(
-      (acc, curr) => {
+      (acc: Record<'PIX' | 'CREDIT' | 'DEBIT' | 'CASH', number>, curr: any) => {
         if (curr.type === 'INFLOW') {
-          acc[curr.paymentMethod] = (acc[curr.paymentMethod] || 0) + curr.amount;
+          const key = curr.paymentMethod as 'PIX' | 'CREDIT' | 'DEBIT' | 'CASH';
+          acc[key] = (acc[key] || 0) + (curr.amount || 0);
         }
         return acc;
       },

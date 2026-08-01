@@ -59,7 +59,7 @@ export default async function AdminSubscriptionsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800 bg-slate-950">
-            {companies.map((company) => {
+            {companies.map((company: any) => {
               const subscription = company.subscription;
               return (
                 <tr key={company.id} className="hover:bg-slate-900/70">

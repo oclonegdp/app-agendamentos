@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Calendar,
   DollarSign,
@@ -20,9 +20,22 @@ export default function DashboardPage() {
     activeClients: 142,
   });
 
-  const [aiInsights] = useState(
-    'Nenhum conflito de horário detectado. Há um buraco na agenda às 15:00 que pode ser preenchido.'
-  );
+  const [aiInsights, setAiInsights] = useState('Carregando insights de IA...');
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/ai/insights');
+        if (!res.ok) throw new Error('Falha ao buscar insights');
+        const data = await res.json();
+        if (mounted && data?.insights) setAiInsights(data.insights);
+      } catch (e) {
+        if (mounted) setAiInsights('Não foi possível carregar insights de IA.');
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <div className="space-y-6 pb-20 md:pb-6 text-zinc-100">
@@ -161,8 +174,8 @@ export default function DashboardPage() {
               <Sparkles className="w-4 h-4" />
               Cérebro de Automação IA
             </div>
-            <p className="text-sm text-zinc-300 leading-relaxed bg-zinc-950/60 p-4 rounded-xl border border-zinc-800/80">
-              "{aiInsights}"
+            <p className="text-sm text-zinc-300 leading-relaxed bg-zinc-950/60 p-4 rounded-xl border border-zinc-800/80 whitespace-pre-wrap">
+              {aiInsights}
             </p>
           </div>
 

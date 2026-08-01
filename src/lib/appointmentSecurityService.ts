@@ -67,7 +67,7 @@ export class AppointmentSecurityService {
     const { companyId, clientId, serviceId, professionalId, date, status } = input;
 
     try {
-      const result = await prisma.$transaction(async (tx) => {
+      const result = await prisma.$transaction(async (tx: any) => {
         const service = await tx.service.findFirst({
           where: { id: serviceId, companyId },
         });

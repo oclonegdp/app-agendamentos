@@ -95,6 +95,7 @@ model Company {
   transactions   Transaction[]
   commissions    Commission[]
   automationJobs AutomationJob[]
+  automationLogs  AutomationLog[]
   exceptions     CompanyException[]
   subscription   CompanySubscription?
 }
@@ -177,6 +178,7 @@ model Appointment {
   company       Company?   @relation(fields: [companyId], references: [id])
   transaction   Transaction? 
   commission    Commission?
+  automationLogs AutomationLog[]
 }
 
 model Expense {
@@ -255,4 +257,20 @@ model AutomationJob {
   createdAt    DateTime          @default(now())
   companyId    String?
   company      Company?          @relation(fields: [companyId], references: [id])
+}
+
+model AutomationLog {
+  id           String    @id @default(uuid())
+  companyId    String?
+  appointmentId String?
+  actionType   String
+  payload      Json
+  result       Json?
+  status       AutomationJobStatus @default(PENDING)
+  createdAt    DateTime  @default(now())
+
+  company      Company?  @relation(fields: [companyId], references: [id])
+  appointment  Appointment? @relation(fields: [appointmentId], references: [id])
+  @@index([companyId])
+  @@index([appointmentId])
 }
