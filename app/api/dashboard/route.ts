@@ -29,13 +29,10 @@ export async function GET(request: Request) {
     const todayEnd = new Date(now);
     todayEnd.setHours(23, 59, 59, 999);
 
-    const [appointments, expenses, todayAppointments, todayExpenseList, todayAppointmentList, todayTransactions, clientsCount, stockCount] = await Promise.all([
+    const [appointments, todayAppointments, todayAppointmentList, todayTransactions, clientsCount] = await Promise.all([
       prisma.appointment.findMany({
         where: { ...companyFilter, ...dateFilter },
         include: { service: true },
-      }),
-      prisma.expense.findMany({
-        where: { ...companyFilter, ...dateFilter },
       }),
       prisma.appointment.findMany({
         where: {
@@ -47,15 +44,6 @@ export async function GET(request: Request) {
         },
         include: { client: true, service: true, staff: true },
         orderBy: { date: 'asc' },
-      }),
-      prisma.expense.findMany({
-        where: {
-          ...companyFilter,
-          date: {
-            gte: todayStart,
-            lte: todayEnd,
-          },
-        },
       }),
       prisma.appointment.findMany({
         where: {
@@ -78,22 +66,24 @@ export async function GET(request: Request) {
         },
       }),
       prisma.client.count({ where: companyFilter }),
-      prisma.stock.count({ where: companyFilter }),
     ]);
 
     const totalRevenue = appointments.reduce(
       (acc: number, curr: { price?: number | null; service?: { price?: number | null } | null }) => acc + (curr.price || curr.service?.price || 0),
       0,
     );
-    const totalExpenses = expenses.reduce(
-      (acc: number, curr: { amount?: number | null }) => acc + (curr.amount || 0),
+    const totalExpenses = todayTransactions.reduce(
+      (acc: number, curr: { type?: string; amount?: number | null }) => acc + ((curr.type === 'OUTFLOW') ? (curr.amount || 0) : 0),
       0,
     );
     const todayRevenue = todayAppointments.reduce(
       (acc: number, curr: { price?: number | null; service?: { price?: number | null } | null }) => acc + (curr.price || curr.service?.price || 0),
       0,
     );
-    const todayExpenses = todayExpenseList.reduce((acc: number, curr: { amount?: number | null }) => acc + (curr.amount || 0), 0);
+    const todayExpenses = todayTransactions.reduce(
+      (acc: number, curr: { type?: string; amount?: number | null }) => acc + ((curr.type === 'OUTFLOW') ? (curr.amount || 0) : 0),
+      0,
+    );
     const paymentMethodTotals = todayTransactions.reduce(
       (acc: Record<'PIX' | 'CREDIT' | 'DEBIT' | 'CASH', number>, curr: any) => {
         if (curr.type === 'INFLOW') {
@@ -113,7 +103,6 @@ export async function GET(request: Request) {
       netProfit,
       totalAppointments: appointments.length,
       clientsCount,
-      stockCount,
       todayRevenue,
       todayExpenses,
       todayNetProfit,

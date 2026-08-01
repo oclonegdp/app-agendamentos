@@ -12,8 +12,6 @@ export default function Sidebar() {
     { href: '/dashboard/appointments', label: 'Agendamentos' },
     { href: '/dashboard/clients', label: 'Clientes' },
     { href: '/dashboard/services', label: 'Serviços' },
-    { href: '/dashboard/expenses', label: 'Despesas' },
-    { href: '/dashboard/stock', label: 'Estoque' },
     { href: '/dashboard/company', label: 'Empresa' },
     { href: '/logout', label: 'Sair' },
   ];

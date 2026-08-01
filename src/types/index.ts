@@ -97,18 +97,3 @@ export type AutomationJob = {
   createdAt: string;
 };
 
-export type Expense = {
-  id: string;
-  description: string;
-  amount: number;
-  date: string;
-  category?: string;
-};
-
-export type StockItem = {
-  id: string;
-  name: string;
-  quantity: number;
-  minQuantity?: number;
-  price?: number;
-};

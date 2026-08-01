@@ -88,8 +88,6 @@ model Company {
   clients        Client[]
   services       Service[]
   appointments   Appointment[]
-  expenses       Expense[]
-  stock          Stock[]
   staff          Staff[]
   cashRegisters  CashRegister[]
   transactions   Transaction[]
@@ -181,26 +179,6 @@ model Appointment {
   automationLogs AutomationLog[]
 }
 
-model Expense {
-  id          String   @id @default(uuid())
-  companyId   String?
-  company     Company? @relation(fields: [companyId], references: [id])
-  description String
-  amount      Float
-  date        DateTime
-  category    String?
-  transaction Transaction?
-}
-
-model Stock {
-  id          String   @id @default(uuid())
-  companyId   String?
-  company     Company? @relation(fields: [companyId], references: [id])
-  name        String
-  quantity    Int
-  minQuantity Int?
-  price       Float?
-}
 
 model CashRegister {
   id           String              @id @default(uuid())
@@ -223,13 +201,11 @@ model Transaction {
   paymentMethod  PaymentMethod
   status         TransactionStatus @default(PENDING)
   appointmentId  String?           @unique
-  expenseId      String?           @unique
   cashRegisterId String?
   companyId      String?
   createdAt      DateTime          @default(now())
 
   appointment    Appointment?      @relation(fields: [appointmentId], references: [id])
-  expense        Expense?          @relation(fields: [expenseId], references: [id])
   cashRegister   CashRegister?     @relation(fields: [cashRegisterId], references: [id])
   company        Company?          @relation(fields: [companyId], references: [id])
 }

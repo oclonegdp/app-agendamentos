@@ -75,7 +75,7 @@ export default function FinancialAIPage() {
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">Engine Multimodal</p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">Análise financeira automática</h1>
-          <p className="mt-3 text-slate-400 max-w-2xl">Envie comprovantes ou transcrições de compra para gerar cálculo de custos e impacto no estoque.</p>
+          <p className="mt-3 text-slate-400 max-w-2xl">Envie comprovantes ou transcrições de compra para gerar cálculo de custos e recomendações automáticas.</p>
         </div>
       </div>
 
