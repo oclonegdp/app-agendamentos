@@ -14,6 +14,8 @@ import {
   Menu,
   X,
   LogOut,
+  Zap,
+  Cpu,
 } from "lucide-react";
 
 interface AppLayoutProps {
@@ -27,6 +29,8 @@ const navItems = [
   { name: "Serviços", href: "/dashboard/services", icon: Scissors },
   { name: "Caixa", href: "/dashboard/cash", icon: Wallet },
   { name: "Estoque", href: "/dashboard/stock", icon: Package },
+  { name: "Assistente IA", href: "/dashboard/assistant", icon: Zap },
+  { name: "IA Financeira", href: "/dashboard/financial-ai", icon: Cpu },
   { name: "Empresa", href: "/dashboard/company", icon: Settings },
 ];
 
